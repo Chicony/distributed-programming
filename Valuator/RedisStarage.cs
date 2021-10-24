@@ -8,7 +8,6 @@ namespace Valuator
     {
         private readonly IConnectionMultiplexer connection = ConnectionMultiplexer.Connect("localhost, allowAdmin=true");
         private readonly IDatabase db;
-
         public RedisStorage() 
         {
             db = connection.GetDatabase();
