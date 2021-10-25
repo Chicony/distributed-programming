@@ -24,8 +24,8 @@ namespace Valuator.Pages
         {
             _logger.LogDebug(id);
             
-             Rank = Convert.ToDouble(_storage.Load(Constants.RankKeyPrefix + id.ToString()));
-             Similarity = Convert.ToDouble(_storage.Load(Constants.SimilarityKeyPrefix + id.ToString()));
+             Rank = Convert.ToDouble(_storage.GetValue (Constants.RankKeyPrefix + id.ToString()));
+             Similarity = Convert.ToDouble(_storage.GetValue (Constants.SimilarityKeyPrefix + id.ToString()));
         }
     }
 }

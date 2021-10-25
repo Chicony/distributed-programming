@@ -39,12 +39,12 @@ namespace Valuator.Pages
             string id = Guid.NewGuid().ToString();
 
             string textKey = Constants.TextKeyPrefix + id;
-            _storage.Store(textKey, text);
+            _storage.SetValue (textKey, text);
 
             string similarityKey = Constants.SimilarityKeyPrefix + id;
             double similarity = GetSimilarity(text, id);
 
-            _storage.Store(similarityKey, similarity.ToString());
+            _storage.SetValue (similarityKey, similarity.ToString());
 
             CancellationTokenSource cts = new CancellationTokenSource();
 
@@ -70,10 +70,10 @@ namespace Valuator.Pages
         private double GetSimilarity(string text, string id)
         {
             id = Constants.TextKeyPrefix + id;
-            var keys = _storage.GetKeysWithPrefix(Constants.TextKeyPrefix);
+            var keys = _storage.GetValues(Constants.TextKeyPrefix);
             foreach (var key in keys)
             {
-                if(key != id && _storage.Load(key) == text)
+                if(key != id && _storage.GetValue (key) == text)
                 {
                     return 1;
                 }
