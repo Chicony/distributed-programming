@@ -1,10 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using NATS.Client;
+using Storage;
+using Tools;
 
 namespace Valuator.Pages
 {
@@ -24,51 +27,53 @@ namespace Valuator.Pages
 
         }
 
-        public IActionResult OnPost(string text)
+        public async Task<IActionResult> OnPost(string text)
         {
+            if (string.IsNullOrEmpty(text))
+            {
+                return Redirect("/");
+            }
+
             _logger.LogDebug(text);
 
             string id = Guid.NewGuid().ToString();
 
-            string textKey = "TEXT-" + id;
-            //TODO: сохранить в БД text по ключу textKey
-            _storage.SetValue(textKey, text);
+            string textKey = Constants.TextKeyPrefix + id;
+            _storage.Store(textKey, text);
 
-            string rankKey = "RANK-" + id;
-            //TODO: посчитать rank и сохранить в БД по ключу rankKey
-            _storage.SetValue(rankKey, CalculateRank(text).ToString());
+            string similarityKey = Constants.SimilarityKeyPrefix + id;
+            double similarity = GetSimilarity(text, id);
 
-            string similarityKey = "SIMILARITY-" + id;
-            //TODO: посчитать similarity и сохранить в БД по ключу similarityKey
-            _storage.SetValue(similarityKey, CalculateSimilarity(text, id).ToString());
+            _storage.Store(similarityKey, similarity.ToString());
 
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            await CreateCalculatingRankTask(id);
+            
             return Redirect($"summary?id={id}");
         }
-
-        private double CalculateRank (string text)
+        
+        private async Task CreateCalculatingRankTask(string id)
         {
-            double length = text.Length;
-            int counter = 0;
-            
-            for (int j = 0; j < length; ++j)
+            ConnectionFactory cf = new ConnectionFactory();
+            using (IConnection con = cf.CreateConnection())
             {
-                if (!Char.IsLetter(text[j]))
-                {
-                    ++counter;
-                }
-            }    
+                byte[] data = Encoding.UTF8.GetBytes(id);
+                con.Publish("valuator.processing.rank", data);
+                await Task.Delay(1000);
 
-            return Math.Round(counter / length, 2);
+                con.Drain();
+                con.Close();
+            }
         }
 
-        private double CalculateSimilarity (string text, string id) 
+        private double GetSimilarity(string text, string id)
         {
-            id = "TEXT-" + id;
-            var values = _storage.GetValues("TEXT-");
-
-            foreach (var val in values)
+            id = Constants.TextKeyPrefix + id;
+            var keys = _storage.GetKeysWithPrefix(Constants.TextKeyPrefix);
+            foreach (var key in keys)
             {
-                if (val != id && _storage.GetValue(val) == text)
+                if(key != id && _storage.Load(key) == text)
                 {
                     return 1;
                 }

@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Storage;
+using Tools;
 
 namespace Valuator.Pages
 {
     public class SummaryModel : PageModel
     {
         private readonly ILogger<SummaryModel> _logger;
-        private readonly IStorage _storage;
+        private IStorage _storage;
 
         public SummaryModel(ILogger<SummaryModel> logger, IStorage storage)
         {
@@ -25,10 +23,9 @@ namespace Valuator.Pages
         public void OnGet(string id)
         {
             _logger.LogDebug(id);
-
-            //TODO: проинициализировать свойства Rank и Similarity сохранёнными в БД значениями
-            Rank = Convert.ToDouble(_storage.GetValue("RANK-" + id.ToString()));
-             Similarity = Convert.ToDouble(_storage.GetValue("SIMILARITY-" + id.ToString()));
+            
+             Rank = Convert.ToDouble(_storage.Load(Constants.RankKeyPrefix + id.ToString()));
+             Similarity = Convert.ToDouble(_storage.Load(Constants.SimilarityKeyPrefix + id.ToString()));
         }
     }
 }
