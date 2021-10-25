@@ -1,0 +1,12 @@
+Z:\distributed-programming\Storage\bin\Debug\net5.0\Storage.deps.json
+Z:\distributed-programming\Storage\bin\Debug\net5.0\Storage.dll
+Z:\distributed-programming\Storage\bin\Debug\net5.0\ref\Storage.dll
+Z:\distributed-programming\Storage\bin\Debug\net5.0\Storage.pdb
+Z:\distributed-programming\Storage\obj\Debug\net5.0\Storage.csprojAssemblyReference.cache
+Z:\distributed-programming\Storage\obj\Debug\net5.0\Storage.GeneratedMSBuildEditorConfig.editorconfig
+Z:\distributed-programming\Storage\obj\Debug\net5.0\Storage.AssemblyInfoInputs.cache
+Z:\distributed-programming\Storage\obj\Debug\net5.0\Storage.AssemblyInfo.cs
+Z:\distributed-programming\Storage\obj\Debug\net5.0\Storage.csproj.CoreCompileInputs.cache
+Z:\distributed-programming\Storage\obj\Debug\net5.0\Storage.dll
+Z:\distributed-programming\Storage\obj\Debug\net5.0\ref\Storage.dll
+Z:\distributed-programming\Storage\obj\Debug\net5.0\Storage.pdb

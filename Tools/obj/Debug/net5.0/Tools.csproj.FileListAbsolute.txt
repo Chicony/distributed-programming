@@ -1,0 +1,12 @@
+Z:\distributed-programming\Tools\bin\Debug\net5.0\Tools.deps.json
+Z:\distributed-programming\Tools\bin\Debug\net5.0\Tools.dll
+Z:\distributed-programming\Tools\bin\Debug\net5.0\ref\Tools.dll
+Z:\distributed-programming\Tools\bin\Debug\net5.0\Tools.pdb
+Z:\distributed-programming\Tools\obj\Debug\net5.0\Tools.csprojAssemblyReference.cache
+Z:\distributed-programming\Tools\obj\Debug\net5.0\Tools.GeneratedMSBuildEditorConfig.editorconfig
+Z:\distributed-programming\Tools\obj\Debug\net5.0\Tools.AssemblyInfoInputs.cache
+Z:\distributed-programming\Tools\obj\Debug\net5.0\Tools.AssemblyInfo.cs
+Z:\distributed-programming\Tools\obj\Debug\net5.0\Tools.csproj.CoreCompileInputs.cache
+Z:\distributed-programming\Tools\obj\Debug\net5.0\Tools.dll
+Z:\distributed-programming\Tools\obj\Debug\net5.0\ref\Tools.dll
+Z:\distributed-programming\Tools\obj\Debug\net5.0\Tools.pdb
