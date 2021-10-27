@@ -40,3 +40,5 @@
 2021/10/25 17:52:01 [error] 8316#11024: CreateFile() "Z:\distributed-programming\nginx/logs/nginx.pid" failed (2: The system cannot find the file specified)
 2021/10/25 18:05:49 [notice] 5244#11632: signal process started
 2021/10/25 18:07:48 [notice] 8716#8744: signal process started
+2021/10/27 11:01:47 [notice] 12916#12920: signal process started
+2021/10/27 11:04:01 [notice] 6700#9972: signal process started

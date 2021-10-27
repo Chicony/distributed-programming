@@ -4,6 +4,8 @@ using System.Text;
 using Storage;
 using Tools;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace RankCalculator
 {
@@ -19,20 +21,37 @@ namespace RankCalculator
             _logger = logger;
             _storage = storage;
             _connection = new ConnectionFactory().CreateConnection();
-            _subscription = _connection.SubscribeAsync("valuator.processing.rank", "rank_calculator", (sender, args)
+            _subscription = _connection.SubscribeAsync("valuator.processing.rank", "rank_calculator", async (sender, args)
                 =>
             {
                 string id = Encoding.UTF8.GetString(args.Message.Data);
 
                 string textKey = Constants.TextKeyPrefix + id;
-                string text = _storage.GetValue (textKey);
+                string text = _storage.GetValue(textKey);
 
                 string rankKey = Constants.RankKeyPrefix + id;
-                string rank = GetRank(text).ToString();
-                _storage.SetValue (rankKey, rank);
+                double rank = GetRank(text);
+                _storage.SetValue(rankKey, rank.ToString());
 
                 _logger.LogDebug($"Rank = {rank}");
+
+                RankMessage rankMessage = new RankMessage(id, rank);
+                await SentMessage(rankMessage);
             });
+        }
+
+        private async Task SentMessage(RankMessage rankMsg)
+        {            
+            ConnectionFactory cf = new ConnectionFactory();
+            using (IConnection c = cf.CreateConnection())
+            {
+                var data = JsonSerializer.Serialize(rankMsg);
+                c.Publish("rankCalculator.logging.rank", Encoding.UTF8.GetBytes(data));
+                await Task.Delay(1000);
+
+                c.Drain();
+                c.Close();
+            }
         }
 
          public void Run()
