@@ -3,8 +3,11 @@ namespace Storage
 {
     public interface IStorage
     {
-        void SetValue  (string key, string value);
-        string GetValue  (string key);
-        List<string> GetValues(string prefix);
+        void Store (string shardKey, string key, string value);
+        void StoreShardKey(string id, string shardKey);
+        public void StoreToSet(string setId, string shardKey, string value);
+        string GetShardKey(string id);
+        string Load (string shardKey, string key);
+        bool CheckingValue(string id, string shardKey, string value);
     }
 }
