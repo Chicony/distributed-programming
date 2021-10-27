@@ -27,24 +27,28 @@ namespace Valuator.Pages
 
         }
 
-        public async Task<IActionResult> OnPost(string text)
+        public async Task<IActionResult> OnPost(string text, string shardKey)
         {
             if (string.IsNullOrEmpty(text))
             {
                 return Redirect("/");
             }
 
-            _logger.LogDebug(text);
-
             string id = Guid.NewGuid().ToString();
 
+            _storage.StoreShardKey(id, shardKey);
+
+            _logger.LogDebug("LOOKUP: {id}, {shardKey}", id, shardKey);
+
             string textKey = Constants.TextKeyPrefix + id;
-            _storage.SetValue(textKey, text);
+            _storage.Store(shardKey, textKey, text);
 
             string similarityKey = Constants.SimilarityKeyPrefix + id;
             double similarity = GetSimilarity(text, id);
 
-            _storage.SetValue(similarityKey, similarity.ToString());
+            _storage.Store(shardKey, similarityKey, similarity.ToString());
+
+            _storage.StoreToSet(Constants.TextsSetKey, shardKey, text);
 
             await CreateCalculatingRankTask(id);
             
@@ -85,16 +89,16 @@ namespace Valuator.Pages
 
         private double GetSimilarity(string text, string id)
         {
-            id = Constants.TextKeyPrefix + id;
-            var keys = _storage.GetValues(Constants.TextKeyPrefix);
-            foreach (var key in keys)
+            if (_storage.CheckingValue(Constants.TextsSetKey, Constants.RusId, text) ||
+                _storage.CheckingValue(Constants.TextsSetKey, Constants.EUId, text) ||
+                _storage.CheckingValue(Constants.TextsSetKey, Constants.OtherId, text))
             {
-                if(key != id && _storage.GetValue(key) == text)
-                {
-                    return 1;
-                }
+                return 1;
             }
-            return 0;
+            else
+            {
+                return 0;
+            }
         }
     }
 }

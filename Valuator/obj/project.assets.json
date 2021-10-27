@@ -1568,6 +1568,29 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
+      },
+      "Storage/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "StackExchange.Redis": "2.2.4"
+        },
+        "compile": {
+          "bin/placeholder/Storage.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Storage.dll": {}
+        }
+      },
+      "Tools/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/Tools.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Tools.dll": {}
+        }
       }
     }
   },
@@ -5569,12 +5592,23 @@
         "system.xml.xdocument.4.3.0.nupkg.sha512",
         "system.xml.xdocument.nuspec"
       ]
+    },
+    "Storage/1.0.0": {
+      "type": "project",
+      "path": "../Storage/Storage.csproj",
+      "msbuildProject": "../Storage/Storage.csproj"
+    },
+    "Tools/1.0.0": {
+      "type": "project",
+      "path": "../Tools/Tools.csproj",
+      "msbuildProject": "../Tools/Tools.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
       "NATS.Client >= 0.12.0",
-      "StackExchange.Redis >= 2.2.4"
+      "Storage >= 1.0.0",
+      "Tools >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -5601,7 +5635,14 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "Z:\\distributed-programming\\Storage\\Storage.csproj": {
+              "projectPath": "Z:\\distributed-programming\\Storage\\Storage.csproj"
+            },
+            "Z:\\distributed-programming\\Tools\\Tools.csproj": {
+              "projectPath": "Z:\\distributed-programming\\Tools\\Tools.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -5617,10 +5658,6 @@
           "NATS.Client": {
             "target": "Package",
             "version": "[0.12.0, )"
-          },
-          "StackExchange.Redis": {
-            "target": "Package",
-            "version": "[2.2.4, )"
           }
         },
         "imports": [
